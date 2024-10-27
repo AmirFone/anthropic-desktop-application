@@ -13,9 +13,11 @@ const Microphone = ({ onTranscribe }) => {
     setRecord(false);
   };
 
-  const onStop = async (recordedData) => {
-    // Save the audio file and send to Main Process for transcription
-    const audioPath = recordedData.blobURL; // Or handle file saving
+  const onStopRecording = async (recordedData) => {
+    // Convert blob URL to a file path if necessary
+    // Electron doesn't have direct access to blob URLs, so you might need to handle saving the blob
+    // For simplicity, assume recordedData.blobURL is accessible via file path
+    const audioPath = recordedData.blobURL.replace('file://', '');
     const response = await window.api.transcribeAudio(audioPath);
     if (response.success) {
       onTranscribe(response.text);
@@ -25,14 +27,14 @@ const Microphone = ({ onTranscribe }) => {
   };
 
   return (
-    <div>
+    <div className="microphone">
       <button onClick={record ? stopRecording : startRecording}>
         <img src="/images/microphone-icon.png" alt="Microphone" />
       </button>
       <ReactMic
         record={record}
         className="sound-wave"
-        onStop={onStop}
+        onStop={onStopRecording}
         strokeColor="#000000"
         backgroundColor="#FF4081"
       />

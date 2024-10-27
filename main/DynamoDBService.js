@@ -1,4 +1,4 @@
-// main/main/DynamoDBService.js
+// main/DynamoDBService.js
 const AWS = require('aws-sdk');
 
 // Configure AWS SDK

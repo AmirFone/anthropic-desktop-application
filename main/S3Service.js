@@ -1,4 +1,4 @@
-// main/main/S3Service.js
+// main/S3Service.js
 const AWS = require('aws-sdk');
 const fs = require('fs');
 const path = require('path');

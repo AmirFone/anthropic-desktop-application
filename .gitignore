@@ -45,3 +45,6 @@ build/
 
 # Windows specific
 Thumbs.db
+
+# React build
+renderer/public/dist/

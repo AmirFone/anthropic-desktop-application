@@ -1,6 +1,7 @@
 // main/whisper.js
 const axios = require('axios');
 const fs = require('fs');
+const FormData = require('form-data');
 
 const transcribeAudio = async (audioPath) => {
   try {
@@ -18,6 +19,7 @@ const transcribeAudio = async (audioPath) => {
 
     return response.data.text;
   } catch (error) {
+    console.error('Transcription Error:', error);
     throw new Error('Transcription failed');
   }
 };

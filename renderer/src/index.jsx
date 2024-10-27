@@ -5,7 +5,8 @@ import App from './App';
 import './styles.css'; // Import global styles
 import { ClerkProvider } from '@clerk/clerk-react';
 
-const clerkFrontendApi = process.env.CLERK_FRONTEND_API;
+// Ensure that CLERK_FRONTEND_API is available
+const clerkFrontendApi = process.env.REACT_APP_CLERK_FRONTEND_API;
 
 ReactDOM.render(
   <ClerkProvider frontendApi={clerkFrontendApi}>

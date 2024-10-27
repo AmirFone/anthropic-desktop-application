@@ -5,7 +5,14 @@ const { createChat, getChats, getChatMessages, addMessage } = require('./DynamoD
 const { takeScreenshot } = require('./screenshot');
 const { transcribeAudio } = require('./whisper');
 const { uploadImage } = require('./S3Service');
-require('dotenv').config();
+const { ClerkExpressRequireAuth } = require('@clerk/clerk-sdk-node');
+const dotenv = require('dotenv');
+
+// Load environment variables
+dotenv.config();
+
+// Initialize Clerk SDK if necessary
+// Ensure Clerk is properly initialized here if using server-side features
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -19,8 +26,12 @@ function createWindow() {
     },
   });
 
-  win.loadURL('http://localhost:3000'); // During development
-  // For production, load the built index.html
+  if (process.env.NODE_ENV === 'development') {
+    win.loadURL('http://localhost:3000'); // During development
+    win.webContents.openDevTools();
+  } else {
+    win.loadFile('renderer/public/index.html'); // For production
+  }
 }
 
 app.whenReady().then(createWindow);
@@ -29,12 +40,12 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
 
-// IPC handler for getting environment variables
-ipcMain.handle('get-env', (event, key) => {
-  return process.env[key];
+// For macOS re-opening the app
+app.on('activate', () => {
+  if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
 
-// IPC handlers for DynamoDB operations
+// IPC handler for DynamoDB operations
 ipcMain.handle('create-chat', async (event, title, model, userId) => {
   try {
     const chatId = await createChat(userId, title, model);

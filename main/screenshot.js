@@ -2,6 +2,7 @@
 const screenshot = require('screenshot-desktop');
 const fs = require('fs');
 const path = require('path');
+const { app } = require('electron');
 
 const takeScreenshot = async () => {
   try {
@@ -10,6 +11,7 @@ const takeScreenshot = async () => {
     fs.writeFileSync(screenshotPath, img);
     return screenshotPath;
   } catch (error) {
+    console.error('Screenshot Error:', error);
     throw new Error('Screenshot failed');
   }
 };

@@ -2,29 +2,17 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('api', {
-  authenticate: async (credentials) => {
-    return await ipcRenderer.invoke('authenticate', credentials);
+  createChat: async (title, model, userId) => {
+    return await ipcRenderer.invoke('create-chat', title, model, userId);
   },
-  // Expose other APIs as needed
-});
-// main/preload.js (updated)
-const { contextBridge, ipcRenderer } = require('electron');
-
-contextBridge.exposeInMainWorld('api', {
-  authenticate: async (credentials) => {
-    return await ipcRenderer.invoke('authenticate', credentials);
-  },
-  getChats: async () => {
-    return await ipcRenderer.invoke('get-chats');
+  getChats: async (userId) => {
+    return await ipcRenderer.invoke('get-chats', userId);
   },
   getChatMessages: async (chatId) => {
     return await ipcRenderer.invoke('get-chat-messages', chatId);
   },
   addMessage: async (chatId, message) => {
     return await ipcRenderer.invoke('add-message', chatId, message);
-  },
-  createChat: async (title, model) => {
-    return await ipcRenderer.invoke('create-chat', title, model);
   },
   uploadImage: async (imagePath) => {
     return await ipcRenderer.invoke('upload-image', imagePath);

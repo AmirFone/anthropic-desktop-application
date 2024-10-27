@@ -1,17 +1,40 @@
 // renderer/src/components/ChatList.jsx
 import React, { useEffect, useState } from 'react';
-import { getChats } from '../../main/db'; // Assuming you expose DB methods via preload
+import { useUser } from '@clerk/clerk-react';
 
 const ChatList = ({ onSelectChat }) => {
   const [chats, setChats] = useState([]);
+  const { user } = useUser();
 
   useEffect(() => {
-    // Fetch chats from local storage or database
-    window.api.getChats().then((data) => setChats(data));
-  }, []);
+    if (user) {
+      window.api.getChats(user.id).then((response) => {
+        if (response.success) {
+          setChats(response.chats);
+        } else {
+          console.error(response.message);
+        }
+      });
+    }
+  }, [user]);
 
   const handleSelect = (chatId) => {
     onSelectChat(chatId);
+  };
+
+  const handleNewChat = async () => {
+    const title = prompt('Enter chat title:');
+    if (title) {
+      // Choose default model or prompt for model
+      const model = 'sonic-3.5';
+      window.api.createChat(title, model, user.id).then((response) => {
+        if (response.success) {
+          setChats([...chats, { id: response.chatId, title, model }]);
+        } else {
+          console.error(response.message);
+        }
+      });
+    }
   };
 
   return (
@@ -24,7 +47,7 @@ const ChatList = ({ onSelectChat }) => {
           </li>
         ))}
       </ul>
-      <button onClick={() => {/* Implement new chat creation */}}>New Chat</button>
+      <button onClick={handleNewChat}>New Chat</button>
     </div>
   );
 };

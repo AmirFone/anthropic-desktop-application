@@ -4,7 +4,7 @@
   "description": "Desktop chat application using Anthropic's API",
   "main": "main/main.js",
   "scripts": {
-    "start": "electron .",
+    "start": "webpack serve --mode development --hot & electron .",
     "dev": "concurrently \"webpack serve --mode development\" \"electron .\"",
     "build": "webpack --mode production && electron-builder",
     "pack": "electron-builder --dir",
@@ -19,6 +19,7 @@
     "files": [
       "main/**/*",
       "renderer/public/**/*",
+      "renderer/src/dist/**/*",
       "assets/**/*",
       "package.json"
     ],
@@ -30,9 +31,21 @@
     },
     "linux": {
       "target": "AppImage"
-    }
+    },
+    "extraResources": [
+      {
+        "from": "renderer/public/",
+        "to": "renderer/public/",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "assets/",
+        "to": "assets/",
+        "filter": ["**/*"]
+      }
+    ]
   },
-  "author": "",
+  "author": "Your Name",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.26.0",
@@ -57,6 +70,7 @@
     "aws-sdk": "^2.1691.0",
     "axios": "^1.7.7",
     "better-sqlite3": "^8.7.0",
+    "clerk-sdk-node": "^3.1.0",
     "dotenv": "^16.3.1",
     "react": "^18.3.1",
     "react-audio-voice-recorder": "^2.2.0",
