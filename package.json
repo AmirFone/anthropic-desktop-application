@@ -1,0 +1,68 @@
+{
+  "name": "anthropic-chat-app",
+  "version": "1.0.0",
+  "description": "Desktop chat application using Anthropic's API",
+  "main": "main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "concurrently \"webpack serve --mode development\" \"electron .\"",
+    "build": "webpack --mode production && electron-builder",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.yourdomain.anthropic-chat-app",
+    "productName": "Anthropic Chat App",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main/**/*",
+      "renderer/public/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-react": "^7.25.9",
+    "babel-loader": "^9.2.1",
+    "concurrently": "^8.2.1",
+    "css-loader": "^6.11.0",
+    "electron": "^26.3.0",
+    "electron-builder": "^24.6.4",
+    "style-loader": "^3.3.4",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.2"
+  },
+  "dependencies": {
+    "@arcblock/forge-util": "^1.7.1",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^5.16.7",
+    "aws-sdk": "^2.1691.0",
+    "axios": "^1.7.7",
+    "better-sqlite3": "^8.7.0",
+    "dotenv": "^16.3.1",
+    "react": "^18.3.1",
+    "react-audio-voice-recorder": "^2.2.0",
+    "react-dom": "^18.3.1",
+    "react-redux": "^9.1.2",
+    "redux": "^5.0.1",
+    "screenshot-desktop": "^1.15.0",
+    "sqlite3": "^5.1.7"
+  }
+}
