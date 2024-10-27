@@ -49,7 +49,8 @@
     "webpack-dev-server": "^4.15.2"
   },
   "dependencies": {
-    "@arcblock/forge-util": "^1.7.1",
+    "@clerk/clerk-react": "^5.13.1",
+    "@clerk/nextjs": "^6.0.2",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/material": "^5.16.7",
