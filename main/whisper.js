@@ -1,26 +1,28 @@
 // main/whisper.js
 const axios = require('axios');
-const fs = require('fs');
 const FormData = require('form-data');
 
-const transcribeAudio = async (audioPath) => {
+const transcribeAudio = async (blob) => {
   try {
-    const apiKey = process.env.OPENAI_API_KEY; // Store securely
     const formData = new FormData();
-    formData.append('file', fs.createReadStream(audioPath));
+    formData.append('file', blob, 'audio.webm'); // Adjust name and type if needed
     formData.append('model', 'whisper-1');
 
-    const response = await axios.post('https://api.openai.com/v1/audio/transcriptions', formData, {
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        ...formData.getHeaders(),
-      },
-    });
+    const response = await axios.post(
+      'https://api.openai.com/v1/audio/transcriptions',
+      formData,
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+          ...formData.getHeaders(),
+        },
+      }
+    );
 
-    return response.data.text;
+    return { success: true, text: response.data.text };
   } catch (error) {
     console.error('Transcription Error:', error);
-    throw new Error('Transcription failed');
+    return { success: false, message: 'Transcription failed' };
   }
 };
 

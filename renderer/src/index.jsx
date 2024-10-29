@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import './styles.css'; // Import global styles
 import { initializeApp } from 'firebase/app';
+import { initializeFirestore } from 'firebase/firestore';
 import { FirebaseAuthProvider } from './contexts/FirebaseAuthContext';
 
 const firebaseConfig = {
@@ -15,9 +16,14 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
 
-console.log('Firebase Config:', firebaseConfig); // For debugging purposes
+const app = initializeApp(firebaseConfig);
 
-initializeApp(firebaseConfig);
+const db = initializeFirestore(app, {
+  experimentalForceLongPolling: true,
+  useFetchStreams: false,
+});
+
+console.log('Firestore Initialized:', db); // For debugging purposes
 
 const container = document.getElementById('root');
 const root = createRoot(container);
