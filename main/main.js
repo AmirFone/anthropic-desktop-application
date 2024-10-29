@@ -1,18 +1,14 @@
 // main/main.js
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const { createChat, getChats, getChatMessages, addMessage } = require('./DynamoDBService');
+const { createChat, getChats, getChatMessages, addMessage } = require('./FirebaseService');
 const { takeScreenshot } = require('./screenshot');
 const { transcribeAudio } = require('./whisper');
-const { uploadImage } = require('./S3Service');
-const { ClerkExpressRequireAuth } = require('@clerk/clerk-sdk-node');
+const { uploadImage } = require('./FirebaseStorageService');
 const dotenv = require('dotenv');
 
 // Load environment variables
 dotenv.config();
-
-// Initialize Clerk SDK if necessary
-// Ensure Clerk is properly initialized here if using server-side features
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -45,7 +41,7 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
 
-// IPC handler for DynamoDB operations
+// IPC handler for Firebase operations
 ipcMain.handle('create-chat', async (event, title, model, userId) => {
   try {
     const chatId = await createChat(userId, title, model);
@@ -112,6 +108,24 @@ ipcMain.handle('upload-image', async (event, imagePath) => {
     const imageUrl = await uploadImage(imagePath);
     return { success: true, url: imageUrl };
   } catch (error) {
+    return { success: false, message: error.message };
+  }
+});
+
+const { getAIResponse } = require('./anthropicService');
+
+// Add IPC handler for getting AI response
+ipcMain.handle('get-ai-response', async (event, userId, chatId, model) => {
+  try {
+    // Fetch messages for the chat
+    const messages = await getChatMessages(chatId);
+    // Get AI response
+    const aiMessage = await getAIResponse(userId, model, messages);
+    // Add AI message to chat
+    await addMessage(chatId, aiMessage);
+    return { success: true, message: aiMessage };
+  } catch (error) {
+    console.error('Get AI Response Error:', error);
     return { success: false, message: error.message };
   }
 });

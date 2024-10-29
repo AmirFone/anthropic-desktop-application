@@ -1,14 +1,14 @@
 // renderer/src/components/ChatList.jsx
-import React, { useEffect, useState } from 'react';
-import { useUser } from '@clerk/clerk-react';
+import React, { useEffect, useState, useContext } from 'react';
+import { FirebaseAuthContext } from '../contexts/FirebaseAuthContext';
 
 const ChatList = ({ onSelectChat }) => {
   const [chats, setChats] = useState([]);
-  const { user } = useUser();
+  const { user } = useContext(FirebaseAuthContext);
 
   useEffect(() => {
     if (user) {
-      window.api.getChats(user.id).then((response) => {
+      window.api.getChats(user.uid).then((response) => {
         if (response.success) {
           setChats(response.chats);
         } else {
@@ -27,7 +27,7 @@ const ChatList = ({ onSelectChat }) => {
     if (title) {
       // Choose default model or prompt for model
       const model = 'sonic-3.5';
-      window.api.createChat(title, model, user.id).then((response) => {
+      window.api.createChat(title, model, user.uid).then((response) => {
         if (response.success) {
           setChats([...chats, { id: response.chatId, title, model }]);
         } else {

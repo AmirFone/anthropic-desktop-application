@@ -1,7 +1,11 @@
 // main/preload.js
 const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('api', {
+  getAIResponse: async (userId, chatId, model) => {
+    return await ipcRenderer.invoke('get-ai-response', userId, chatId, model);
+  },
   createChat: async (title, model, userId) => {
     return await ipcRenderer.invoke('create-chat', title, model, userId);
   },

@@ -1,16 +1,18 @@
 // renderer/src/components/ChatWindow.jsx
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import ImageUploader from './ImageUploader';
 import Microphone from './Microphone';
 import ScreenshotButton from './ScreenshotButton';
+import { FirebaseAuthContext } from '../contexts/FirebaseAuthContext';
 
 const ChatWindow = ({ chatId, model }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const messagesEndRef = useRef(null);
+  const { user } = useContext(FirebaseAuthContext);
 
   useEffect(() => {
-    // Fetch chat messages from DynamoDB
+    // Fetch chat messages from Firebase
     window.api.getChatMessages(chatId).then((response) => {
       if (response.success) {
         setMessages(response.messages);
@@ -35,10 +37,10 @@ const ChatWindow = ({ chatId, model }) => {
       setInput('');
 
       // Fetch AI response from Anthropic
-      const aiResponse = await window.api.getAIResponse(chatId, model);
+      const aiResponse = await window.api.getAIResponse(user.uid, chatId, model);
       if (aiResponse.success) {
         setMessages((prev) => [...prev, aiResponse.message]);
-        await window.api.addMessage(chatId, aiResponse.message);
+        // No need to add the message here since it's added in the main process
       } else {
         console.error(aiResponse.message);
         const errorMsg = { role: 'ai', content: 'Error generating response.' };
@@ -49,6 +51,7 @@ const ChatWindow = ({ chatId, model }) => {
       console.error(addMsgResponse.message);
     }
   };
+
 
   const handleImageUpload = async (imageUrl) => {
     // Save image message

@@ -1,7 +1,7 @@
 // renderer/src/components/Microphone.jsx
 import React, { useState } from 'react';
 import { ReactMic } from 'react-mic';
-
+import { ReactMediaRecorder } from "react-media-recorder";
 const Microphone = ({ onTranscribe }) => {
   const [record, setRecord] = useState(false);
 
@@ -31,7 +31,7 @@ const Microphone = ({ onTranscribe }) => {
       <button onClick={record ? stopRecording : startRecording}>
         <img src="/images/microphone-icon.png" alt="Microphone" />
       </button>
-      <ReactMic
+      <ReactMediaRecorder
         record={record}
         className="sound-wave"
         onStop={onStopRecording}

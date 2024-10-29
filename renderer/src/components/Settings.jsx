@@ -1,15 +1,20 @@
 // renderer/src/components/Settings.jsx
-import React from 'react';
-import { useUser, UserButton } from '@clerk/clerk-react';
+import React, { useContext } from 'react';
+import { FirebaseAuthContext } from '../contexts/FirebaseAuthContext';
 
 const Settings = () => {
-  const { user } = useUser();
+  const { user, auth } = useContext(FirebaseAuthContext);
 
   if (!user) return null;
 
+  const handleSignOut = () => {
+    auth.signOut();
+  };
+
   return (
     <div className="settings">
-      <UserButton />
+      <p>{user.email}</p>
+      <button onClick={handleSignOut}>Sign Out</button>
       {/* Add additional settings as needed */}
     </div>
   );

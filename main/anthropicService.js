@@ -1,9 +1,24 @@
 // main/anthropicService.js
 const axios = require('axios');
+const admin = require('firebase-admin');
 
-const getAIResponse = async (chatId, model, messages) => {
+// Assuming Firebase Admin SDK is initialized in FirebaseService.js
+const db = admin.firestore();
+
+const getAIResponse = async (userId, model, messages) => {
   try {
-    const apiKey = process.env.ANTHROPIC_API_KEY; // Store securely
+    // Fetch user's Anthropic API key from Firestore
+    const userDocRef = db.collection('users').doc(userId);
+    const userDoc = await userDocRef.get();
+    if (!userDoc.exists) {
+      throw new Error('User not found');
+    }
+    const userData = userDoc.data();
+    const apiKey = userData.anthropicApiKey;
+    if (!apiKey) {
+      throw new Error('Anthropic API key not found for user');
+    }
+
     const response = await axios.post(
       `https://api.anthropic.com/v1/models/${model}/completions`,
       {
