@@ -16,12 +16,11 @@ function createWindow() {
     height: 800,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      // Security configurations
       nodeIntegration: false,
-      contextIsolation: true,
+      contextIsolation: true, // Enable contextIsolation
     },
   });
-
+win.webContents.openDevTools(); 
   if (process.env.NODE_ENV === 'development') {
     win.loadURL('http://localhost:3000'); // During development
     win.webContents.openDevTools();

@@ -1,6 +1,6 @@
 // renderer/src/index.jsx
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 import './styles.css'; // Import global styles
 import { initializeApp } from 'firebase/app';
@@ -15,11 +15,14 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
 
+console.log('Firebase Config:', firebaseConfig); // For debugging purposes
+
 initializeApp(firebaseConfig);
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(
   <FirebaseAuthProvider>
     <App />
-  </FirebaseAuthProvider>,
-  document.getElementById('root')
+  </FirebaseAuthProvider>
 );

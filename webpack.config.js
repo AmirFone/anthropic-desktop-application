@@ -1,16 +1,17 @@
 // webpack.config.js
-const webpack = require('webpack');
 const path = require('path');
-const dotenv = require('dotenv').config({ path: __dirname + '/.env' });
+const Dotenv = require('dotenv-webpack');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin'); // Import the plugin
 
 module.exports = {
-  mode: 'development',
-  entry: './renderer/src/index.jsx', // Ensure this path is correct
+  mode: 'development', // or 'production' as needed
+  entry: './renderer/src/index.jsx',
   output: {
     path: path.resolve(__dirname, 'renderer/public/dist'),
     filename: 'bundle.js',
     publicPath: '/dist/',
   },
+  devtool: 'source-map', // Helps with debugging
   module: {
     rules: [
       {
@@ -36,7 +37,19 @@ module.exports = {
       '@components': path.resolve(__dirname, 'renderer/src/components/'),
       '@assets': path.resolve(__dirname, 'assets/'),
     },
+    fallback: {
+      util: require.resolve('util/'), // Place fallback here
+      // Add other fallbacks as needed
+    },
   },
+  plugins: [
+    new Dotenv({
+      path: path.resolve(__dirname, '.env'),
+      safe: false,
+      systemvars: true,
+    }),
+    new NodePolyfillPlugin(), // Use this plugin to handle polyfills
+  ],
   devServer: {
     static: {
       directory: path.join(__dirname, 'renderer/public'),
@@ -44,10 +57,5 @@ module.exports = {
     port: 3000,
     hot: true,
   },
-  target: 'electron-renderer',
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env': JSON.stringify(dotenv.parsed),
-    }),
-  ],
+  target: 'web', // Ensure target is 'web' for browser environment
 };

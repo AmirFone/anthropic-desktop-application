@@ -58,8 +58,10 @@
     "babel-loader": "^9.2.1",
     "concurrently": "^8.2.1",
     "css-loader": "^6.11.0",
+    "dotenv-webpack": "^8.1.0",
     "electron": "^26.3.0",
     "electron-builder": "^24.6.4",
+    "node-polyfill-webpack-plugin": "^4.0.0",
     "style-loader": "^3.3.4",
     "webpack": "^5.95.0",
     "webpack-cli": "^5.1.4",
@@ -77,6 +79,7 @@
     "react-mic": "^12.4.6",
     "react-redux": "^9.1.2",
     "redux": "^5.0.1",
-    "screenshot-desktop": "^1.15.0"
+    "screenshot-desktop": "^1.15.0",
+    "util": "^0.12.5"
   }
 }
