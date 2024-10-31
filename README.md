@@ -1,6 +1,8 @@
 # Anthropic Chat Desktop Application
 
 An ElectronJS desktop application that brings Anthropic's AI assistant capabilities to your desktop. This application replicates functionalities similar to ChatGPT's desktop app but utilizes Anthropic's API to provide AI-powered chatting experiences.
+![Screenshot 2024-10-31 at 12 18 40 PM](https://github.com/user-attachments/assets/76115a49-229d-4e0b-b08e-68241767b13a)
+![Screenshot 2024-10-31 at 12 18 56 PM](https://github.com/user-attachments/assets/dfd2fa8f-4648-4cb3-be6e-629c2b981e70)
 
 ## Table of Contents
 
