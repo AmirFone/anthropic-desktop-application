@@ -76,7 +76,7 @@ An ElectronJS desktop application that brings Anthropic's AI assistant capabilit
 ### Clone the Repository
 
 ```bash
-git clone [https://github.com/yourusername/anthropic-chat-app.git](https://github.com/AmirFone/anthropic-desktop-application)
+git clone https://github.com/yourusername/anthropic-chat-app.git
 cd anthropic-chat-app
 ```
 
